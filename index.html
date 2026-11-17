@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thanksgiving Dinner — You're Invited</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fbf5ea; --paper:#fffaf1; --ink:#3a2418; --muted:#7a5e4c;
+    --rust:#b4532a; --rust-d:#8f3d1c; --gold:#d99a2b; --olive:#6b7041; --line:#ead9c2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.5;
+    background-image:radial-gradient(circle at 10% 0%, #f6e3c6 0, transparent 40%),radial-gradient(circle at 100% 30%, #f3dcc0 0, transparent 35%)}
+  .wrap{max-width:640px;margin:0 auto;padding:24px 18px 64px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px 22px;box-shadow:0 10px 30px -18px rgba(90,50,20,.35);position:relative;overflow:hidden}
+  .hero{text-align:center;padding-top:40px}
+  .leaves{position:absolute;top:-6px;left:0;right:0;display:flex;justify-content:space-between;pointer-events:none}
+  .eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--rust);font-weight:600}
+  h1{font-family:Fraunces,serif;font-weight:600;font-size:clamp(34px,8vw,52px);line-height:1.05;margin:10px 0 6px;color:var(--rust-d)}
+  h1 em{font-weight:400;color:var(--olive)}
+  .sub{color:var(--muted);font-size:16px;margin:0 auto;max-width:440px}
+  .details{display:grid;gap:12px;margin:26px 0 6px;text-align:left}
+  .detail{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:#fdf1e1}
+  .detail svg{flex:none;margin-top:2px}
+  .detail b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .detail span{font-size:16px;white-space:pre-line}
+  .edit-btn{margin-top:10px;background:none;border:1px dashed var(--line);color:var(--muted);border-radius:10px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer}
+  h2{font-family:Fraunces,serif;font-weight:600;font-size:26px;margin:0 0 4px;color:var(--rust-d)}
+  .section{margin-top:22px}
+  .hint{color:var(--muted);font-size:14px;margin:0 0 18px}
+  label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+  input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+  textarea{min-height:70px;resize:vertical}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .seg button{font:inherit;font-size:15px;padding:11px 6px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--rust);color:#fff;border-color:var(--rust)}
+  .dish-row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr) auto;gap:8px;margin-bottom:8px;align-items:center}
+  .dish-row select,.dish-row input{padding:10px}
+  .trivia{margin-top:22px;padding:16px 14px;border-radius:16px;background:linear-gradient(160deg,#fdf1e1,#f8e6cc);border:1px solid var(--line)}
+  .trivia-head{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+  .trivia-head b{font-family:Fraunces,serif;font-size:20px;color:var(--rust-d);display:block;line-height:1.1}
+  .trivia-head span{font-size:13px;color:var(--muted)}
+  .q{margin-top:14px}
+  .q p{margin:0 0 8px;font-weight:600;font-size:15px}
+  .q p small{color:var(--rust);font-weight:600;margin-right:4px}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .opts button{font:inherit;font-size:14px;text-align:left;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  .opts button[aria-pressed="true"]{background:var(--olive);border-color:var(--olive);color:#fff}
+  .score{font-family:Fraunces,serif;font-size:20px;color:var(--rust-d);margin:12px 0 4px}
+  .review{text-align:left;margin:10px auto 0;max-width:460px;font-size:14px}
+  .review div{padding:7px 0;border-bottom:1px dashed var(--line)}
+  .review div:last-child{border-bottom:0}
+  .review .fact{color:var(--muted);font-size:13px;display:block}
+  .lb{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:15px}
+  .lb:last-child{border-bottom:0}
+  .lb b{color:var(--rust-d)}
+  .rm{font:inherit;font-size:20px;line-height:1;width:40px;height:44px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:12px;cursor:pointer}
+  .add-dish{font:inherit;font-size:15px;font-weight:600;width:100%;padding:10px;border:1px dashed var(--rust);color:var(--rust);background:none;border-radius:12px;cursor:pointer}
+  .primary{margin-top:20px;width:100%;font:inherit;font-weight:600;font-size:17px;background:var(--rust);color:#fff;border:0;border-radius:14px;padding:14px;cursor:pointer}
+  .primary:disabled{opacity:.55;cursor:default}
+  .ghost{font:inherit;font-size:14px;background:none;border:0;color:var(--rust);cursor:pointer;text-decoration:underline;padding:6px 0}
+  .status{font-size:14px;margin-top:10px;min-height:20px;text-align:center;color:var(--olive)}
+  .status.err{color:#a3271b}
+  .stats{display:flex;gap:10px;margin:6px 0 16px;flex-wrap:wrap}
+  .stat{flex:1;min-width:120px;background:#fdf1e1;border-radius:14px;padding:12px 14px}
+  .stat b{font-family:Fraunces,serif;font-size:28px;color:var(--rust-d);display:block;line-height:1}
+  .stat span{font-size:13px;color:var(--muted)}
+  .cat{margin-top:14px}
+  .cat h3{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);margin:0 0 6px;display:flex;justify-content:space-between}
+  .cat h3 small{color:var(--muted);letter-spacing:0;text-transform:none;font-weight:500}
+  .dish{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:15px}
+  .dish:last-child{border-bottom:0}
+  .dish .who{color:var(--muted);font-size:14px;text-align:right}
+  .empty{color:var(--muted);font-style:italic;font-size:14px;padding:6px 0}
+  .guests{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .chip{font-size:13px;padding:5px 10px;border-radius:999px;background:#f1e6d2}
+  .chip.no{background:#efe9e3;color:var(--muted);text-decoration:line-through}
+  .chip.maybe{background:#f6ead0}
+  .done{text-align:center;padding:8px 0}
+  .done .big{font-family:Fraunces,serif;font-size:24px;color:var(--olive);margin:6px 0}
+  .hidden{display:none!important}
+  .modal{position:fixed;inset:0;background:rgba(58,36,24,.45);display:flex;align-items:flex-end;justify-content:center;z-index:10}
+  .modal .card{width:100%;max-width:640px;border-radius:20px 20px 0 0;max-height:90vh;overflow:auto}
+  .leaf-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+  .leaf{position:absolute;top:-50px;will-change:transform;animation:fall linear infinite}
+  .leaf svg{display:block;animation:sway ease-in-out infinite alternate}
+  @keyframes fall{from{transform:translate3d(0,-60px,0)}to{transform:translate3d(var(--drift),110vh,0)}}
+  @keyframes sway{from{transform:rotate(-35deg) translateX(-14px)}to{transform:rotate(35deg) translateX(14px)}}
+  @media (prefers-reduced-motion:reduce){.leaf-layer{display:none}}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:26px}
+  @media (min-width:640px){.modal{align-items:center}.modal .card{border-radius:20px}}
+</style>
+</head>
+<body>
+<div class="leaf-layer" id="leaves" aria-hidden="true"></div>
+<div class="wrap">
+
+  <div class="card hero">
+    <div class="leaves" aria-hidden="true">
+      <svg width="120" height="80" viewBox="0 0 120 80"><g transform="rotate(-20 40 30)"><path d="M40 4 C55 20 58 38 40 56 C22 38 25 20 40 4Z" fill="#d99a2b"/><path d="M40 8 V58" stroke="#a46c12" stroke-width="1.5"/></g><g transform="rotate(25 85 28)"><path d="M85 6 l6 12 12-4-6 12 10 8-13 2 2 13-11-8-11 8 2-13-13-2 10-8-6-12 12 4z" fill="#b4532a"/></g></svg>
+      <svg width="120" height="80" viewBox="0 0 120 80"><g transform="rotate(18 80 30)"><path d="M80 4 C95 20 98 38 80 56 C62 38 65 20 80 4Z" fill="#6b7041"/><path d="M80 8 V58" stroke="#4a4e2a" stroke-width="1.5"/></g><g transform="rotate(-30 35 30)"><path d="M35 8 l6 12 12-4-6 12 10 8-13 2 2 13-11-8-11 8 2-13-13-2 10-8-6-12 12 4z" fill="#d99a2b"/></g></svg>
+    </div>
+    <div class="eyebrow">You're invited</div>
+    <h1>Thanksgiving <em>Dinner</em></h1>
+    <p class="sub" id="ev-message">Come hungry and bring a dish to share. We'd love to gather around the table with you.</p>
+
+    <div class="details">
+      <div class="detail">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b4532a" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+        <div><b>When</b><span id="ev-when">Saturday, November 28, 2026 · 3:00 PM</span></div>
+      </div>
+      <div class="detail">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b4532a" stroke-width="2" stroke-linecap="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <div><b>Where</b><span id="ev-where">904 S Oakland Ct.
+Aurora, CO</span></div>
+      </div>
+      <div class="detail">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b4532a" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+        <div><b>Hosted by</b><span id="ev-host">Sabrina &amp; Jason</span></div>
+      </div>
+      <div class="detail">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b4532a" stroke-width="2" stroke-linecap="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+        <div><b>Please RSVP by</b><span id="ev-rsvpby">Monday, November 23</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card section" id="rsvp-card">
+    <h2>RSVP</h2>
+    <p class="hint" id="rsvp-hint">Let us know if you can make it and what you're bringing.</p>
+
+    <div id="offline" class="empty hidden">RSVPs aren't open yet — check back soon!</div>
+
+    <form id="rsvp-form" novalidate>
+      <label for="name">Your name</label>
+      <input id="name" maxlength="60" autocomplete="name" placeholder="e.g. Aunt Linda" required>
+
+      <label>Will you be joining us?</label>
+      <div class="seg" role="group" aria-label="Attendance">
+        <button type="button" data-v="yes" aria-pressed="false">🦃 Yes!</button>
+        <button type="button" data-v="maybe" aria-pressed="false">🤔 Maybe</button>
+        <button type="button" data-v="no" aria-pressed="false">😔 Can't</button>
+      </div>
+
+      <div id="attending-fields">
+        <label for="party">How many in your party (including you)?</label>
+        <input id="party" type="number" min="1" max="20" value="1" inputmode="numeric">
+
+        <label>What are you bringing?</label>
+        <div id="dish-list"></div>
+        <button type="button" class="add-dish" id="add-dish">+ Add another item</button>
+      </div>
+
+      <div id="trivia-block" class="trivia">
+        <div class="trivia-head">
+          <span style="font-size:26px">🦃</span>
+          <div><b>Turkey Trivia</b><span>Answer all 5 to send your RSVP. Your score goes on the leaderboard!</span></div>
+        </div>
+        <div id="trivia-qs"></div>
+      </div>
+
+      <label for="note">Note for the host <span style="font-weight:400;color:var(--muted)">(allergies, arrival time…)</span></label>
+      <textarea id="note" maxlength="300"></textarea>
+
+      <button class="primary" id="submit" type="submit">Send RSVP</button>
+      <div class="status" id="status" role="status"></div>
+    </form>
+
+    <div id="done" class="done hidden">
+      <div style="font-size:36px">🍂</div>
+      <div class="big" id="done-msg">Thanks — you're on the list!</div>
+      <p class="hint" id="done-detail" style="margin:0"></p>
+      <div class="score" id="done-score"></div>
+      <div class="review" id="done-review"></div>
+      <button class="ghost" id="change">Change my RSVP</button>
+    </div>
+  </div>
+
+  <div class="card section">
+    <h2>What's on the table</h2>
+    <p class="hint">Check what others are bringing so we don't end up with five pies (although…).</p>
+    <div class="stats">
+      <div class="stat"><b id="s-guests">0</b><span>guests coming</span></div>
+      <div class="stat"><b id="s-dishes">0</b><span>dishes so far</span></div>
+      <div class="stat"><b id="s-maybe">0</b><span>maybes</span></div>
+    </div>
+    <div id="menu"><div class="empty" id="menu-loading">Loading the menu…</div></div>
+    <div class="cat">
+      <h3>Responses</h3>
+      <div class="guests" id="guests"><span class="empty">No RSVPs yet — be the first!</span></div>
+    </div>
+  </div>
+
+  <div class="card section">
+    <h2>Trivia leaderboard 🏆</h2>
+    <p class="hint">Bragging rights at the table go to whoever tops this list.</p>
+    <div id="leaderboard"><div class="empty">No scores yet.</div></div>
+  </div>
+
+  <footer>Happy Thanksgiving 🧡</footer>
+</div>
+
+<script>
+(function(){
+  const CATS = ["Main","Side","Appetizer","Bread & Rolls","Dessert","Drinks","Other"];
+  const $ = id => document.getElementById(id);
+  // Paste the Google Apps Script web app URL (ends in /exec) between the quotes:
+  const API_URL = "https://script.google.com/macros/s/AKfycbx56K2wN7lLporm2sIRVtBzIbKqU2fK9KaCe6D4Fljg-cUkTyZFhyO0KNZkzb2F5mxA/exec";
+  const API_READY = /^https:\/\/script\.google\.com\/.+\/exec$/.test(API_URL);
+  let attending = null, mine = null, rsvps = [];
+
+  // Each browser gets its own guest id + private key so guests can change only their own RSVP.
+  function store(k, v){ try { if (v === undefined) return JSON.parse(localStorage.getItem(k)); localStorage.setItem(k, JSON.stringify(v)); } catch(e){ return null; } }
+  function rand(n){ const a = new Uint8Array(n); crypto.getRandomValues(a); return [...a].map(x => x.toString(16).padStart(2,'0')).join(''); }
+  let me = store('tg-guest');
+  if (!me || !me.id || !me.key) { me = { id: rand(8), key: rand(16) }; store('tg-guest', me); }
+
+  // Attendance buttons
+  document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => setAttending(b.dataset.v)));
+  function setAttending(v){
+    attending = v;
+    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    $('attending-fields').classList.toggle('hidden', v === 'no');
+  }
+
+  function setStatus(msg, err){ const s=$('status'); s.textContent = msg||''; s.classList.toggle('err', !!err); }
+
+  // ---- Falling leaves ----
+  (function(){
+    const layer = $('leaves'); if (!layer) return;
+    const colors = ['#d99a2b','#b4532a','#8f3d1c','#c97b2a','#6b7041','#e0a83a'];
+    const shapes = [
+      // maple
+      'M12 1l2.2 4.6 4.3-1.6-1.7 4.4 4.7 2.4-4.9 1.4 1.1 4.6-4.3-2.4-1.4 5.6h-.1l-1.4-5.6-4.3 2.4 1.1-4.6-4.9-1.4 4.7-2.4L5.5 4l4.3 1.6z',
+      // oval leaf
+      'M12 1C18 6 19 14 12 23 5 14 6 6 12 1z',
+      // oak-ish
+      'M12 1c2 2 3 2 4 1 0 2 1 3 3 3-1 2-1 3 1 4-2 1-2 2-1 4-2 0-3 1-3 3-1-1-2-1-3 0v6h-2v-6c-1-1-2-1-3 0 0-2-1-3-3-3 1-2 1-3-1-4 2-1 2-2 1-4 2 0 3-1 3-3 1 1 2 1 4-1z'
+    ];
+    const count = window.innerWidth < 600 ? 10 : 16;
+    for (let i = 0; i < count; i++) {
+      const size = 16 + Math.random() * 16;
+      const wrap = document.createElement('div');
+      wrap.className = 'leaf';
+      wrap.style.left = (Math.random() * 100) + 'vw';
+      wrap.style.setProperty('--drift', ((Math.random() - .5) * 160) + 'px');
+      wrap.style.animationDuration = (9 + Math.random() * 9) + 's';
+      wrap.style.animationDelay = (-Math.random() * 18) + 's';
+      wrap.style.opacity = (.55 + Math.random() * .35).toFixed(2);
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('width', size); svg.setAttribute('height', size);
+      svg.style.animationDuration = (2 + Math.random() * 2.5) + 's';
+      const p = document.createElementNS(svgNS, 'path');
+      p.setAttribute('d', shapes[i % shapes.length]);
+      p.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+      svg.appendChild(p); wrap.appendChild(svg); layer.appendChild(wrap);
+    }
+  })();
+
+  // ---- Turkey Trivia ----
+  const QUESTIONS = [
+    { q: "Which president made Thanksgiving a national holiday in 1863?",
+      opts: ["George Washington","Abraham Lincoln","Thomas Jefferson","Ulysses S. Grant"], a: 1,
+      fact: "Lincoln proclaimed it in 1863, in the middle of the Civil War." },
+    { q: "Which of these was almost certainly NOT served at the 1621 harvest feast?",
+      opts: ["Venison","Wild fowl","Pumpkin pie","Corn"], a: 2,
+      fact: "No ovens or much sugar back then — pie came later." },
+    { q: "What do you call a male turkey?",
+      opts: ["A gobbler-jack","A tom","A drake","A rooster"], a: 1,
+      fact: "Males are toms (or gobblers); females are hens." },
+    { q: "What's the top flying speed of a wild turkey?",
+      opts: ["About 15 mph","About 25 mph","About 40 mph","About 55 mph"], a: 3,
+      fact: "Up to about 55 mph in short bursts — and they can run around 25 mph!" },
+    { q: "Which president moved Thanksgiving a week earlier, nicknamed “Franksgiving”?",
+      opts: ["Franklin D. Roosevelt","Franklin Pierce","Harry Truman","Herbert Hoover"], a: 0,
+      fact: "FDR did it in 1939; Congress fixed it to the 4th Thursday in 1941." }
+  ];
+  let picks = QUESTIONS.map(() => null);
+  function renderTrivia(){
+    const box = $('trivia-qs'); box.textContent = '';
+    QUESTIONS.forEach((Q, i) => {
+      const q = el('div','q');
+      const p = el('p'); p.appendChild(el('small', null, (i+1) + '.')); p.appendChild(document.createTextNode(Q.q));
+      q.appendChild(p);
+      const opts = el('div','opts');
+      Q.opts.forEach((o, j) => {
+        const b = el('button', null, o); b.type = 'button';
+        b.setAttribute('aria-pressed', String(picks[i] === j));
+        b.addEventListener('click', () => { picks[i] = j; renderTrivia(); });
+        opts.appendChild(b);
+      });
+      q.appendChild(opts); box.appendChild(q);
+    });
+  }
+  renderTrivia();
+  function scoreOf(answers){ return QUESTIONS.reduce((n,Q,i) => n + (answers && answers[i] === Q.a ? 1 : 0), 0); }
+  function hasTrivia(r){ return r && Array.isArray(r.trivia) && r.trivia.length === QUESTIONS.length; }
+
+  // A guest's items: new records use `dishes`; older ones had a single dish/category.
+  function dishesOf(r){
+    if (Array.isArray(r.dishes)) return r.dishes.filter(d => d && d.dish);
+    return r.dish ? [{category: r.category || 'Other', dish: r.dish}] : [];
+  }
+
+  function addDishRow(d){
+    d = d || {};
+    const row = el('div','dish-row');
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label','Category');
+    CATS.forEach(c => { const o = el('option', null, c); o.value = c; sel.appendChild(o); });
+    sel.value = CATS.includes(d.category) ? d.category : 'Side';
+    const inp = document.createElement('input');
+    inp.maxLength = 80; inp.placeholder = 'e.g. Green bean casserole'; inp.value = d.dish || '';
+    inp.setAttribute('aria-label','Dish');
+    const rm = el('button','rm','×'); rm.type = 'button'; rm.setAttribute('aria-label','Remove item');
+    rm.addEventListener('click', () => {
+      row.remove();
+      if (!$('dish-list').children.length) addDishRow();
+    });
+    row.append(sel, inp, rm);
+    $('dish-list').appendChild(row);
+    return inp;
+  }
+  $('add-dish').addEventListener('click', () => {
+    if ($('dish-list').children.length >= 10) return setStatus('That\'s plenty — 10 items max!', true);
+    addDishRow().focus();
+  });
+  addDishRow();
+  function readDishes(){
+    return [...$('dish-list').children].map(row => ({
+      category: row.querySelector('select').value,
+      dish: row.querySelector('input').value.trim()
+    })).filter(d => d.dish);
+  }
+
+  function fillForm(r){
+    $('name').value = r.name || '';
+    setAttending(r.attending || null);
+    $('party').value = r.party || 1;
+    $('dish-list').textContent = '';
+    const ds = dishesOf(r);
+    (ds.length ? ds : [{}]).forEach(addDishRow);
+    $('note').value = r.note || '';
+    // Trivia can only be answered once; hide it when changing an RSVP.
+    $('trivia-block').classList.toggle('hidden', hasTrivia(r));
+  }
+
+  function listText(ds){
+    const names = ds.map(d => d.dish);
+    if (names.length <= 1) return names.join('');
+    return names.slice(0,-1).join(', ') + ' and ' + names[names.length-1];
+  }
+
+  function showDone(r){
+    $('rsvp-form').classList.add('hidden');
+    $('done').classList.remove('hidden');
+    const msgs = {yes:"Thanks — see you there!", maybe:"Got it — hope you can make it!", no:"We'll miss you!"};
+    $('done-msg').textContent = msgs[r.attending] || "Thanks!";
+    const ds = dishesOf(r);
+    let d = '';
+    if (r.attending !== 'no' && ds.length) d = `You're bringing ${listText(ds)} · party of ${r.party}.`;
+    else if (r.attending !== 'no') d = `Party of ${r.party}.`;
+    $('done-detail').textContent = d;
+
+    const rev = $('done-review'); rev.textContent = '';
+    if (hasTrivia(r)) {
+      const s = scoreOf(r.trivia);
+      const cheer = s === 5 ? ' — perfect! 🥧' : s >= 3 ? ' — nice work!' : ' — there\'s always next year 🦃';
+      $('done-score').textContent = `Trivia: ${s} / ${QUESTIONS.length}${cheer}`;
+      QUESTIONS.forEach((Q, i) => {
+        const ok = r.trivia[i] === Q.a;
+        const row = el('div', null, (ok ? '✅ ' : '❌ ') + Q.q);
+        row.appendChild(el('span','fact', (ok ? '' : `Answer: ${Q.opts[Q.a]}. `) + Q.fact));
+        rev.appendChild(row);
+      });
+    } else $('done-score').textContent = '';
+  }
+
+  $('change').addEventListener('click', () => {
+    $('done').classList.add('hidden');
+    $('rsvp-form').classList.remove('hidden');
+    if (mine) fillForm(mine);
+  });
+
+  $('rsvp-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = $('name').value.trim();
+    if (!name) return setStatus('Please enter your name.', true);
+    if (!attending) return setStatus('Please choose Yes, Maybe or Can\'t.', true);
+    const lockedTrivia = hasTrivia(mine) ? mine.trivia : null;
+    if (!lockedTrivia && picks.some(p => p === null)) return setStatus('Answer all 5 trivia questions to send your RSVP!', true);
+    if (!API_READY) return setStatus('RSVPs aren\'t open yet — check back soon!', true);
+    const trivia = lockedTrivia || picks.slice();
+    const party = Math.max(1, Math.min(20, parseInt($('party').value, 10) || 1));
+    const rec = {
+      name, attending,
+      party: attending === 'no' ? 0 : party,
+      dishes: attending === 'no' ? [] : readDishes(),
+      note: $('note').value.trim(),
+      trivia
+    };
+    $('submit').disabled = true; setStatus('Saving…');
+    try {
+      // text/plain body keeps this a "simple" request that Apps Script accepts from any site.
+      const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(Object.assign({ id: me.id, key: me.key }, rec)) });
+      const out = await res.json();
+      if (!out.ok) throw new Error(out.error || 'Save failed');
+      mine = Object.assign({ id: me.id }, out.record);
+      store('tg-mine', mine);
+      setStatus(''); showDone(mine);
+      load();
+    } catch(err) {
+      setStatus('Couldn\'t save your RSVP — please try again in a moment.', true);
+    } finally { $('submit').disabled = false; }
+  });
+
+  // Rendering
+
+  function el(tag, cls, text){ const n=document.createElement(tag); if(cls) n.className=cls; if(text!=null) n.textContent=text; return n; }
+
+  function renderMenu(){
+    const yes = rsvps.filter(r => r.attending === 'yes');
+    const maybe = rsvps.filter(r => r.attending === 'maybe');
+    const withDish = [];
+    rsvps.filter(r => r.attending !== 'no').forEach(r =>
+      dishesOf(r).forEach(d => withDish.push({ name: r.name, attending: r.attending, dish: d.dish, category: d.category })));
+    $('s-guests').textContent = yes.reduce((n,r) => n + (r.party||1), 0);
+    $('s-dishes').textContent = withDish.length;
+    $('s-maybe').textContent = maybe.reduce((n,r) => n + (r.party||1), 0);
+
+    const menu = $('menu'); menu.textContent = '';
+    CATS.forEach(cat => {
+      const items = withDish.filter(r => (CATS.includes(r.category) ? r.category : 'Other') === cat);
+      if (!items.length && (cat === 'Other' || cat === 'Appetizer' || cat === 'Bread & Rolls')) return;
+      const box = el('div','cat');
+      const h = el('h3', null, cat);
+      h.appendChild(el('small', null, items.length ? `${items.length}` : 'needed!'));
+      box.appendChild(h);
+      if (!items.length) box.appendChild(el('div','empty','Nobody yet'));
+      items.forEach(r => {
+        const row = el('div','dish');
+        row.appendChild(el('span', null, r.dish));
+        row.appendChild(el('span','who', r.name + (r.attending === 'maybe' ? ' (maybe)' : '')));
+        box.appendChild(row);
+      });
+      menu.appendChild(box);
+    });
+
+    const lb = $('leaderboard'); lb.textContent = '';
+    const scored = rsvps.filter(hasTrivia).map(r => ({ name: r.name, s: scoreOf(r.trivia), t: r.updatedAt || 0 }))
+                        .sort((a,b) => (b.s - a.s) || a.name.localeCompare(b.name));
+    if (!scored.length) lb.appendChild(el('div','empty','No scores yet.'));
+    const medals = ['🥇','🥈','🥉'];
+    let rank = 0, prev = null;
+    scored.forEach((x, i) => {
+      if (x.s !== prev) { rank = i; prev = x.s; }
+      const row = el('div','lb');
+      row.appendChild(el('span', null, (medals[rank] || '🍂') + ' ' + x.name));
+      row.appendChild(el('b', null, `${x.s} / ${QUESTIONS.length}`));
+      lb.appendChild(row);
+    });
+
+    const g = $('guests'); g.textContent = '';
+    if (!rsvps.length) { g.appendChild(el('span','empty','No RSVPs yet — be the first!')); return; }
+    const order = {yes:0, maybe:1, no:2};
+    [...rsvps].sort((a,b) => (order[a.attending]-order[b.attending]) || a.name.localeCompare(b.name)).forEach(r => {
+      const extra = r.attending !== 'no' && r.party > 1 ? ` +${r.party-1}` : '';
+      g.appendChild(el('span', 'chip ' + (r.attending === 'yes' ? '' : r.attending), r.name + extra));
+    });
+  }
+
+  function offline(){
+    $('offline').classList.remove('hidden');
+    $('rsvp-form').classList.add('hidden');
+    $('menu-loading').textContent = 'The menu will appear here once guests RSVP.';
+  }
+
+  let firstLoad = true, loading = false;
+  async function load(){
+    if (loading) return; loading = true;
+    try {
+      const res = await fetch(API_URL + '?t=' + Date.now());
+      const out = await res.json();
+      if (!out.ok) throw new Error('bad response');
+      rsvps = (out.rsvps || []).filter(r => r && r.name);
+      renderMenu();
+      if (firstLoad) {
+        firstLoad = false;
+        const m = rsvps.find(r => r.id === me.id);
+        if (m) {
+          const saved = store('tg-mine') || {};   // the note is private, so it only comes back from this browser
+          mine = Object.assign({}, m, { note: saved.id === me.id ? (saved.note || '') : '' });
+          fillForm(mine); showDone(mine);
+        }
+      }
+    } catch(e) {
+      if (firstLoad) { $('menu').textContent = ''; $('menu').appendChild(el('div','empty','Couldn\'t load the menu right now — try refreshing.')); }
+    } finally { loading = false; }
+  }
+
+  function init(){
+    if (!API_READY) return offline();
+    load();
+    setInterval(() => { if (!document.hidden) load(); }, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+  }
+  init();
+})();
+</script>
+</body>
+</html>
